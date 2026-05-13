@@ -3598,3 +3598,39 @@ func TestAppendEventSequencesFromPreemptedJobs_PopulatesPreemptiveJobId(t *testi
 	assert.Equal(t, preemptedRun.Id(), preemptedEvent.PreemptedRunId)
 	assert.Equal(t, preemptiveJobId, preemptedEvent.PreemptiveJobId)
 }
+
+func TestAppendEventSequencesFromPreemptedJobs_NilPreemptingJob(t *testing.T) {
+	preemptedJob := testfixtures.NewJob(
+		util.NewULID(),
+		"testJobset",
+		"testQueue",
+		0,
+		toInternalSchedulingInfo(preemptibleGangSchedulingInfo),
+		false,
+		1,
+		false,
+		false,
+		false,
+		1,
+		true,
+	).WithNewRun("testExecutor", "test-node", "node", "pool", 5)
+	preemptedRun := preemptedJob.LatestRun()
+
+	jctx := &schedulercontext.JobSchedulingContext{
+		Job:                   preemptedJob,
+		PreemptingJob:         nil,
+		PreemptionDescription: "preempted due to node resource change",
+	}
+
+	sequences, err := AppendEventSequencesFromPreemptedJobs(nil, []*schedulercontext.JobSchedulingContext{jctx}, time.Now())
+	assert.NoError(t, err)
+	assert.Len(t, sequences, 1)
+
+	events := sequences[0].Events
+	assert.Len(t, events, 3) // JobRunPreempted + JobRunErrors + JobErrors
+
+	preemptedEvent := events[0].GetJobRunPreempted()
+	assert.NotNil(t, preemptedEvent)
+	assert.Equal(t, preemptedRun.Id(), preemptedEvent.PreemptedRunId)
+	assert.Equal(t, "", preemptedEvent.PreemptiveJobId)
+}

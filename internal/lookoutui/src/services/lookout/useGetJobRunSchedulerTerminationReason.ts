@@ -45,18 +45,3 @@ export const useGetJobRunSchedulerTerminationReason = (runId: string, enabled = 
     staleTime: 30_000,
   })
 }
-
-export const useBatchGetJobRunSchedulerTerminationReasons = (runIds: string[], enabled = true) => {
-  const config = getConfig()
-  const authenticatedFetch = useAuthenticatedFetch()
-
-  return useQueries({
-    queries: runIds.map((runId) => ({
-      queryKey: ["getJobRunSchedulerTerminationReason", runId],
-      queryFn: getQueryFn(runId, authenticatedFetch, config.fakeDataEnabled),
-      enabled,
-      refetchOnMount: false,
-      staleTime: 30_000,
-    })),
-  })
-}
