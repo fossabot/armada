@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 
-import { QueryFunction, QueryKey, useQueries, useQuery } from "@tanstack/react-query"
+import { QueryFunction, QueryKey, useQuery } from "@tanstack/react-query"
 
 import { getErrorMessage } from "../../common/utils"
 import { getConfig } from "../../config"
