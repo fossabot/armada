@@ -644,7 +644,7 @@ func AppendEventSequencesFromPreemptedJobs(eventSequences []*armadaevents.EventS
 		eventSequences = append(eventSequences, &armadaevents.EventSequence{
 			Queue:      jctx.Job.Queue(),
 			JobSetName: jctx.Job.Jobset(),
-			Events:     createEventsForPreemptedJob(jctx.JobId, run.Id(), preemptiveJobId(jctx.PreemptingJob), jctx.PreemptionDescription, time),
+			Events:     createEventsForPreemptedJob(jctx.JobId, run.Id(), preemptingJobId(jctx.PreemptingJob), jctx.PreemptionDescription, time),
 		})
 	}
 	return eventSequences, nil
@@ -674,14 +674,14 @@ func createEventsForFailedJob(jobId string, runId string, error *armadaevents.Er
 	}
 }
 
-func preemptiveJobId(preemptingJob *jobdb.Job) string {
+func preemptingJobId(preemptingJob *jobdb.Job) string {
 	if preemptingJob == nil {
 		return ""
 	}
 	return preemptingJob.Id()
 }
 
-func createEventsForPreemptedJob(jobId string, runId string, preemptiveJobId string, reason string, time time.Time) []*armadaevents.EventSequence_Event {
+func createEventsForPreemptedJob(jobId string, runId string, preemptingJobId string, reason string, time time.Time) []*armadaevents.EventSequence_Event {
 	return []*armadaevents.EventSequence_Event{
 		{
 			Created: protoutil.ToTimestamp(time),
@@ -690,7 +690,7 @@ func createEventsForPreemptedJob(jobId string, runId string, preemptiveJobId str
 					PreemptedRunId:  runId,
 					PreemptedJobId:  jobId,
 					Reason:          reason,
-					PreemptiveJobId: preemptiveJobId,
+					PreemptingJobId: preemptingJobId,
 				},
 			},
 		},

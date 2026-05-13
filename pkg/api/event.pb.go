@@ -1089,7 +1089,7 @@ type JobPreemptedEvent struct {
 	Created         *types.Timestamp `protobuf:"bytes,4,opt,name=created,proto3" json:"created,omitempty"`
 	ClusterId       string           `protobuf:"bytes,5,opt,name=cluster_id,json=clusterId,proto3" json:"clusterId,omitempty"`
 	RunId           string           `protobuf:"bytes,6,opt,name=run_id,json=runId,proto3" json:"runId,omitempty"`
-	PreemptiveJobId string           `protobuf:"bytes,7,opt,name=preemptive_job_id,json=preemptiveJobId,proto3" json:"preemptiveJobId,omitempty"`
+	PreemptingJobId string           `protobuf:"bytes,7,opt,name=preempting_job_id,json=preemptingJobId,proto3" json:"preemptingJobId,omitempty"`
 	PreemptiveRunId string           `protobuf:"bytes,8,opt,name=preemptive_run_id,json=preemptiveRunId,proto3" json:"preemptiveRunId,omitempty"`
 	Reason          string           `protobuf:"bytes,9,opt,name=reason,proto3" json:"reason,omitempty"`
 }
@@ -1169,9 +1169,9 @@ func (m *JobPreemptedEvent) GetRunId() string {
 	return ""
 }
 
-func (m *JobPreemptedEvent) GetPreemptiveJobId() string {
+func (m *JobPreemptedEvent) GetPreemptingJobId() string {
 	if m != nil {
-		return m.PreemptiveJobId
+		return m.PreemptingJobId
 	}
 	return ""
 }
@@ -3754,10 +3754,10 @@ func (m *JobPreemptedEvent) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x42
 	}
-	if len(m.PreemptiveJobId) > 0 {
-		i -= len(m.PreemptiveJobId)
-		copy(dAtA[i:], m.PreemptiveJobId)
-		i = encodeVarintEvent(dAtA, i, uint64(len(m.PreemptiveJobId)))
+	if len(m.PreemptingJobId) > 0 {
+		i -= len(m.PreemptingJobId)
+		copy(dAtA[i:], m.PreemptingJobId)
+		i = encodeVarintEvent(dAtA, i, uint64(len(m.PreemptingJobId)))
 		i--
 		dAtA[i] = 0x3a
 	}
@@ -5518,7 +5518,7 @@ func (m *JobPreemptedEvent) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovEvent(uint64(l))
 	}
-	l = len(m.PreemptiveJobId)
+	l = len(m.PreemptingJobId)
 	if l > 0 {
 		n += 1 + l + sovEvent(uint64(l))
 	}
@@ -9629,7 +9629,7 @@ func (m *JobPreemptedEvent) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PreemptiveJobId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field PreemptingJobId", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -9657,7 +9657,7 @@ func (m *JobPreemptedEvent) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.PreemptiveJobId = string(dAtA[iNdEx:postIndex])
+			m.PreemptingJobId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 8:
 			if wireType != 2 {
