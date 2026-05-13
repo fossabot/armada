@@ -644,7 +644,7 @@ func AppendEventSequencesFromPreemptedJobs(eventSequences []*armadaevents.EventS
 		eventSequences = append(eventSequences, &armadaevents.EventSequence{
 			Queue:      jctx.Job.Queue(),
 			JobSetName: jctx.Job.Jobset(),
-			Events:     createEventsForPreemptedJob(jctx.JobId, run.Id(), preemptingJobId(jctx.PreemptingJob), jctx.PreemptionDescription, time),
+			Events:     createEventsForPreemptedJob(jctx.JobId, run.Id(), preemptiveJobId(jctx.PreemptingJob), jctx.PreemptionDescription, time),
 		})
 	}
 	return eventSequences, nil
@@ -674,7 +674,7 @@ func createEventsForFailedJob(jobId string, runId string, error *armadaevents.Er
 	}
 }
 
-func preemptingJobId(preemptingJob *jobdb.Job) string {
+func preemptiveJobId(preemptingJob *jobdb.Job) string {
 	if preemptingJob == nil {
 		return ""
 	}
