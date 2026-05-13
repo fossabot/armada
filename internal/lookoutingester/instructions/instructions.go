@@ -478,7 +478,7 @@ func (c *InstructionConverter) handleJobRunErrors(ts time.Time, event *armadaeve
 func (c *InstructionConverter) handleJobRunPreempted(ts time.Time, event *armadaevents.JobRunPreempted, update *model.InstructionSet) error {
 	terminationReasonArgs := map[string]any{}
 	if event.PreemptiveJobId != "" {
-		terminationReasonArgs["preemptingJobId"] = event.PreemptiveJobId
+		terminationReasonArgs["preemptiveJobId"] = event.PreemptiveJobId
 	}
 	jobRun := model.UpdateJobRunInstruction{
 		RunId:                      event.PreemptedRunId,
